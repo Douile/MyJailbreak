@@ -2,7 +2,7 @@
  * MyJailbreak - Warden - Friendly Fire Module.
  * by: shanapu
  * https://github.com/shanapu/MyJailbreak/
- * 
+ *
  * Copyright (C) 2016-2017 Thomas Schmidt (shanapu)
  * Contributer: Hexer10
  *
@@ -11,7 +11,7 @@
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, version 3.0, as published by the
  * Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
@@ -51,6 +51,7 @@ ConVar g_bFF;
 ConVar Cvar_tg_team_none_attack;
 ConVar Cvar_tg_cvar_friendlyfire;
 ConVar Cvar_tg_ct_friendlyfire;
+ConVar gc_sAdminFlag;
 
 //Integer
 int OldCvar_tg_team_none_attack;
@@ -68,6 +69,7 @@ public void FriendlyFire_OnPluginStart()
 	gc_sFFCT = AutoExecConfig_CreateConVar("sm_warden_ff_ct_enable", "0", "0 - disabled, 1 - enable ff for cts also", _, true, 0.0, true, 1.0);
 	gc_bFFDeputy = AutoExecConfig_CreateConVar("sm_warden_ff_deputy", "1", "0 - disabled, 1 - enable switch ff for the deputy, too", _, true, 0.0, true, 1.0);
 	gc_sCustomCommandFF = AutoExecConfig_CreateConVar("sm_warden_cmds_ff", "isff, friendlyfire", "Set your custom chat commands for set/see friendly fire(!ff is reservered)(!setff (no 'sm_'/'!')(seperate with comma ', ')(max. 12 commands)");
+	gc_sAdminFlag = AutoExecConfig_CreateConVar("sm_warden_ff_admflag","b","Set the flag for admin");
 
 	// Hooks
 	HookEvent("round_end", FriendlyFire_Event_RoundEnd);
@@ -101,7 +103,13 @@ public Action Command_FriendlyFire(int client, int args)
 					Cvar_tg_ct_friendlyfire.IntValue = OldCvar_tg_ct_friendlyfire;
 				}
 			}
-			else CPrintToChatAll("%s %t", g_sPrefix, "warden_ffison");
+			else {
+				if (isClientAdmin(client)) {
+					CPrintToChatAll("%s %t", g_sPrefix, "warden_ffison");
+				} else {
+					CReplyToCommand(client, "%s %t", g_sPrefix, "warden_ffison");
+				}
+			}
 		}
 		else
 		{
@@ -118,7 +126,14 @@ public Action Command_FriendlyFire(int client, int args)
 					Cvar_tg_ct_friendlyfire.IntValue = 1;
 				}
 			}
-			else CPrintToChatAll("%s %t", g_sPrefix, "warden_ffisoff");
+			else
+			{
+				if (isClientAdmin(client)) {
+					CPrintToChatAll("%s %t", g_sPrefix, "warden_ffisoff");
+				} else {
+					CReplyToCommand(client, "%s %t", g_sPrefix, "warden_ffisoff");
+				}
+			}
 		}
 	}
 
@@ -218,4 +233,15 @@ public void FriendlyFire_OnConfigsExecuted()
 public void FriendlyFire_OnClientPutInServer(int client)
 {
 	SDKHook(client, SDKHook_TraceAttack, FriendlyFire_OnTraceAttack);
+}
+
+
+ /******************************************************************************
+                   FUNCTIONS
+******************************************************************************/
+
+ bool isClientAdmin(int client) {
+	char flag[16];
+	GetConVarString(gc_sAdminFlag, flag, 16);
+	return CheckVipFlag(client, flag);
 }
