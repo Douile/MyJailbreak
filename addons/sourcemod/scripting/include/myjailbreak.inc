@@ -4,13 +4,13 @@
  * https://github.com/shanapu/MyJailbreak/
  *
  * This file is part of the MyJailbreak SourceMod Plugin.
- * 
+ *
  * Copyright (C) 2016-2017 Thomas Schmidt (shanapu)
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, version 3.0, as published by the
  * Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
@@ -28,7 +28,7 @@
 
 // Defines
 
-#define MYJB_VERSION "Beta 14.0-<COMMIT>"
+#define MYJB_VERSION "Beta 14.1-<COMMIT>"
 
 #define MYJB_URL_LINK "https://github.com/shanapu/MyJailbreak"
 
@@ -43,7 +43,7 @@ public SharedPlugin __pl_myjailbreak =
 {
 	name = "myjailbreak",
 	file = "myjailbreak.smx",
-	
+
 	#if defined REQUIRE_PLUGIN
 	required = 1,
 	#else
@@ -98,7 +98,7 @@ forward Action MyJailbreak_OnJoinGuardQueue(int client);
 
 /*********************************************************
  * Called when a the Last Guard Rule is active
- * 
+ *
  * @NoReturn
  *********************************************************/
 forward void MyJailbreak_OnLastGuardRuleStart();
@@ -170,7 +170,7 @@ forward void MyJailbreak_MenuHandler(Menu menu, MenuAction action, int client, i
 
 /*********************************************************
  * Called on native MyJailbreak_CheckVIPFlags ONLY when
- * CheckCommandAccess return false. 
+ * CheckCommandAccess return false.
  * Feature name refers to plugin VIP Convar.
  *
  * @param client		client index
@@ -335,10 +335,10 @@ native void MyJailbreak_BeaconOff(int client);
  *
  * @param client		client index to check
  * @param command		overwrite command name
- * @param flags			flag string if the command or 
+ * @param flags			flag string if the command or
  *						override is not found.
- * @param feature		feature name to check with 
- *						MyJailbreak_OnCheckVIPFlags when 
+ * @param feature		feature name to check with
+ *						MyJailbreak_OnCheckVIPFlags when
  *						CheckCommandAccess return false
  * @Return			true on allow, false if not
  *********************************************************/
