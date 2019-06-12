@@ -2,7 +2,7 @@
  * MyJailbreak - Warden - Open Cell Doors Module.
  * by: shanapu
  * https://github.com/shanapu/MyJailbreak/
- * 
+ *
  * Copyright (C) 2016-2017 Thomas Schmidt (shanapu)
  *
  * This file is part of the MyJailbreak SourceMod Plugin.
@@ -10,7 +10,7 @@
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, version 3.0, as published by the
  * Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
@@ -88,7 +88,7 @@ public Action Command_OpenDoors(int client, int args)
 	if (!gc_bPlugin.BoolValue || !g_bEnabled || !gc_bOpen.BoolValue)
 		return Plugin_Handled;
 
-	if (IsClientWarden(client) || (IsClientDeputy(client) && gc_bOpenDeputy.BoolValue))
+	if (IsClientWarden(client) || (IsClientDeputy(client) && gc_bOpenDeputy.BoolValue) || CheckCommandAccess(client, "", ADMFLAG_SLAY))
 	{
 		if (gp_bSmartJailDoors) if (SJD_IsCurrentMapConfigured())
 		{
@@ -115,9 +115,9 @@ public Action Command_CloseDoors(int client, int args)
 	if (!gc_bPlugin.BoolValue || !g_bEnabled || !gc_bOpen.BoolValue)
 		return Plugin_Handled;
 
-	if (IsClientWarden(client) || (IsClientDeputy(client) && gc_bOpenDeputy.BoolValue))
+	if (IsClientWarden(client) || (IsClientDeputy(client) && gc_bOpenDeputy.BoolValue) || CheckCommandAccess(client, "", ADMFLAG_SLAY))
 	{
-		if (gp_bSmartJailDoors) if (SJD_IsCurrentMapConfigured()) 
+		if (gp_bSmartJailDoors) if (SJD_IsCurrentMapConfigured())
 		{
 			SJD_CloseDoors();
 
@@ -221,11 +221,11 @@ public Action Timer_OpenCounter(Handle timer, Handle pack)
 			}
 			else CPrintToChatAll("%s %t", g_sPrefix, "warden_opentime");
 		}
-		
+
 		g_hTimerOpen = null;
 		return Plugin_Stop;
 	}
-	
+
 	return Plugin_Continue;
 }
 

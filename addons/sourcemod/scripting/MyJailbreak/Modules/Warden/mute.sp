@@ -2,7 +2,7 @@
  * MyJailbreak - Warden - Mute Module.
  * by: shanapu
  * https://github.com/shanapu/MyJailbreak/
- * 
+ *
  * Copyright (C) 2016-2017 Thomas Schmidt (shanapu)
  *
  * This file is part of the MyJailbreak SourceMod Plugin.
@@ -10,7 +10,7 @@
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, version 3.0, as published by the
  * Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
@@ -133,7 +133,7 @@ public Action Command_UnMuteMenu(int client, int args)
 	if (!gc_bPlugin.BoolValue || !g_bEnabled || !gc_bMute.BoolValue || !gc_bMute.BoolValue)
 		return Plugin_Handled;
 
-	if ((IsClientWarden(client) || (IsClientDeputy(client) && gc_bMuteDeputy.BoolValue)))
+	if ((IsClientWarden(client) || (IsClientDeputy(client) && gc_bMuteDeputy.BoolValue))  || CheckCommandAccess(client, "", ADMFLAG_SLAY))
 	{
 		char info1[255];
 		Menu menu4 = CreateMenu(Handler_UnMuteMenu);
@@ -155,7 +155,7 @@ public Action Command_UnMuteMenu(int client, int args)
 				menu4.AddItem(userid, username);
 			}
 		}
-		
+
 		menu4.ExitBackButton = true;
 		menu4.ExitButton = true;
 		menu4.Display(client, MENU_TIME_FOREVER);
@@ -171,7 +171,7 @@ public Action Command_MuteMenu(int client, int args)
 	if (!gc_bPlugin.BoolValue || !g_bEnabled || !gc_bMute.BoolValue)
 		return Plugin_Handled;
 
-	if ((IsClientWarden(client) || (IsClientDeputy(client) && gc_bMuteDeputy.BoolValue)))
+	if ((IsClientWarden(client) || (IsClientDeputy(client) && gc_bMuteDeputy.BoolValue)) || CheckCommandAccess(client, "", ADMFLAG_SLAY))
 	{
 		char info[255];
 		Menu menu1 = CreateMenu(Handler_MuteMenu);
@@ -255,7 +255,7 @@ public void OnClientSpeakingEx(int client)
 			if (MyJailbreak_CheckVIPFlags(i, "sm_warden_mute_immuntiy", gc_sAdminFlagMute, "sm_warden_mute_immuntiy"))
 				continue;
 
-			if ((GetClientTeam(i) != CS_TEAM_CT) && (!g_bIsMuted[i] || (GetClientListeningFlags(i) != VOICE_MUTED)) || 
+			if ((GetClientTeam(i) != CS_TEAM_CT) && (!g_bIsMuted[i] || (GetClientListeningFlags(i) != VOICE_MUTED)) ||
 				(!gc_bMuteTalkOverTeam.BoolValue && !warden_iswarden(i) && !warden_deputy_isdeputy(i) && (GetClientTeam(i) == CS_TEAM_CT) && (GetClientListeningFlags(i) != VOICE_MUTED)))
 			{
 				if ((gc_bMuteTalkOverDead.BoolValue && IsPlayerAlive(i)) || !gc_bMuteTalkOverDead.BoolValue)
@@ -475,7 +475,7 @@ public int Handler_MuteMenuPlayer(Menu menu5, MenuAction action, int client, int
 	}
 	else if (action == MenuAction_Cancel)
 	{
-		if (Position == MenuCancel_ExitBack) 
+		if (Position == MenuCancel_ExitBack)
 		{
 			FakeClientCommand(client, "sm_menu");
 		}
@@ -507,7 +507,7 @@ public int Handler_MuteMenuTime(Menu menu3, MenuAction action, int client, int s
 	}
 	else if (action == MenuAction_Cancel)
 	{
-		if (selection == MenuCancel_ExitBack) 
+		if (selection == MenuCancel_ExitBack)
 		{
 			FakeClientCommand(client, "sm_wmute");
 		}
@@ -538,7 +538,7 @@ public int Handler_UnMuteMenu(Menu menu4, MenuAction action, int client, int sel
 	}
 	else if (action == MenuAction_Cancel)
 	{
-		if (selection == MenuCancel_ExitBack) 
+		if (selection == MenuCancel_ExitBack)
 		{
 			FakeClientCommand(client, "sm_menu");
 		}
@@ -580,7 +580,7 @@ public int Handler_MuteMenu(Menu menu, MenuAction action, int client, int Positi
 	}
 	else if (action == MenuAction_Cancel)
 	{
-		if (Position == MenuCancel_ExitBack) 
+		if (Position == MenuCancel_ExitBack)
 		{
 			FakeClientCommand(client, "sm_menu");
 		}
@@ -656,7 +656,7 @@ public int Handler_MuteMenuTeam(Menu menu6, MenuAction action, int client, int s
 	}
 	else if (action == MenuAction_Cancel)
 	{
-		if (selection == MenuCancel_ExitBack) 
+		if (selection == MenuCancel_ExitBack)
 		{
 			FakeClientCommand(client, "sm_wmute");
 		}
